@@ -1,66 +1,32 @@
 import React from 'react';
 import { FlatList, View, Modal } from 'react-native';
-import { Button, Text, ThemeProvider, Input } from 'react-native-elements';
+import { ListItem, Button, Text, ThemeProvider, Input } from 'react-native-elements';
+import { ProductOverlay } from './ProductOverlay';
+import { SearchBar } from './SearchBar';
 
-const productStyle = {
-    flex: 1,
-    flexDirection: 'column',
-    padding: 5
-}
-
-const Product = (product) => (
-    <View style={productStyle}>
-        <Text>{product.name}</Text>
-        <View style={{flexDirection: 'row'}}>
-            <Text>Amount: {product.amount}</Text>
-            {/* <Button value="Update" onPress={() => {}}></Button>
-            <Button value="Remove" onPress={() => {}}></Button> */}
-            <ThemeProvider>
-                <Button title="Hey" />
-            </ThemeProvider>
-        </View>
-    </View>);
-
-const productModalStyle = {
-    width: 10,
-    height: 10,
-    marginTop: 22,
-    alignItems: 'center',
-    padding: 100
-}
-
-const ProductModal = ({visible, amount}) => (
-    <View style={productModalStyle}>
-        <Modal
-            animationType="slide"
-            transparent={true}
-            visible={visible}
-            onRequestClose={() => {}}>
-            <Text>Testing</Text>
-        </Modal>
-    </View>
-)
+const Product = ({name, index, amount, onPress}) => (
+    <ListItem
+        key={index}
+        title={name}
+        onPress={() => onPress(index)}
+        subtitle={
+            <View>
+                <Text>Amount: { amount }</Text>
+            </View>
+        }>
+    </ListItem>)
 
 const productListStyle = {
     flexDirection: 'column',
     padding: 10
 }
 
-const SearchBar = (props) =>(
-    <View>
-        <Input
-            placeholder="Search..."
-            style={{height: 30, borderColor: 'gray', borderWidth: 1}}
-            onChangeText={(text) => props.onChangeText(text)}
-            value={props.searchText}
-        />
-    </View>
-)
 export class ProductList extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
             products: props.products,
+            activeProductIndex: 0,
             searchTerm: '',
             showModal: false
         }
@@ -74,14 +40,40 @@ export class ProductList extends React.Component {
         this.setState({products});
     }
 
+    onClickProduct(index) {
+        this.setState({
+            activeProductIndex: index,
+            showModal: true});
+    }
+
+    activeProduct() {
+        return this.state.products[this.state.activeProductIndex];
+    }
+
+    onUpdateProduct(amount) {
+        this.setState({showModal: false});
+    }
+
     render() {
+        let ProductListItem = ({item, index}) => 
+            (<Product 
+                {...item} 
+                index={index}
+                key={index}
+                onPress={(index) => this.onClickProduct(index)} 
+            />)
+        
         return (
             <View style={productListStyle}> 
+                <ProductOverlay 
+                    isVisible={this.state.showModal} 
+                    product={this.activeProduct()}
+                    onCancel={() => this.setState({showModal: false})}
+                    onConfirm={(item) => this.onUpdateProduct(item)}></ProductOverlay>
                 <SearchBar searchTerm={this.state.searchTerm} onChangeText={(term) => {this.onFilter(term)}}/>
                 <FlatList
                     data={this.state.products}
-                    renderItem={({item}) => (<Product key={item.name} {...item} />)}/>
-                <ProductModal visible={this.state.showModal}/>
+                    renderItem={ProductListItem}/>
             </View>
         )
     }
