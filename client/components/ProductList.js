@@ -47,7 +47,7 @@ export class ProductList extends React.Component {
     }
 
     activeProduct() {
-        return this.state.products[this.state.activeProductIndex];
+        return this.state.products[this.state.activeProductIndex] || {amount: 0.00};
     }
 
     onUpdateProduct(amount) {

@@ -12,10 +12,11 @@ import { WebBrowser } from 'expo';
 
 import { MonoText } from '../components/StyledText';
 import { ProductList } from '../components/ProductList';
+import {observer} from 'mobx-react';
 
+import { productState } from '../state';
 
-import { testProductData } from "./data.js";
-
+@observer
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
     header: null,
@@ -27,7 +28,7 @@ export default class HomeScreen extends React.Component {
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
 
           <View>
-            <ProductList products={testProductData}/>
+            <ProductList products={[]}/>
           </View>
 
         </ScrollView>

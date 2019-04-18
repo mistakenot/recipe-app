@@ -16,6 +16,8 @@
     "@react-native-firebase/mlkit": "0.0.4",
     "@types/expo": "^32.0.9",
     "expo": "^32.0.0",
+    "mobx": "^5.9.4",
+    "mobx-react": "^5.4.3",
     "react": "16.5.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
     "react-native-elements": "^1.1.0",
