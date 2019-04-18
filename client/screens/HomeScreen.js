@@ -7,14 +7,28 @@ import {
   View
 } from 'react-native';
 import { WebBrowser } from 'expo';
-
-import { MonoText } from '../components/StyledText';
 import { ProductList } from '../components/ProductList';
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react'; 
+import { observable } from 'mobx';
 
 import { productStore } from '../state';
 
-export default observer(class HomeScreen extends React.Component {
+var timerData = observable({
+    secondsPassed: 0
+});
+
+setInterval(() => {
+    timerData.secondsPassed++;
+}, 1000);
+
+@observer
+class Timer extends React.Component {
+    render() {
+        return (<Text>Seconds passed: { this.props.timerData.secondsPassed } </Text> )
+    }
+};
+
+export default class HomeScreen extends React.Component {
   static navigationOptions = {
     header: null,
   };
@@ -23,22 +37,12 @@ export default observer(class HomeScreen extends React.Component {
     console.warn("RENDER: " + productStore);
     return (
       <View style={styles.container}>
-        <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-
+        <ScrollView>
           <View>
             <ProductList products={productStore}/>
+            <Timer timerData={timerData} />
           </View>
-
         </ScrollView>
-
-        <View style={styles.tabBarInfoContainer}>
-          <Text style={styles.tabBarInfoText}>This is a tab bar. You can edit it in:</Text>
-
-          <View style={[styles.codeHighlightContainer, styles.navigationFilename]}>
-            <MonoText style={styles.codeHighlightText}>navigation/MainTabNavigator.js</MonoText>
-          </View>
-        </View>
-
       </View>
     );
   }
@@ -75,7 +79,7 @@ export default observer(class HomeScreen extends React.Component {
       'https://docs.expo.io/versions/latest/guides/up-and-running.html#can-t-see-your-changes'
     );
   };
-});
+};
 
 const styles = StyleSheet.create({
   container: {

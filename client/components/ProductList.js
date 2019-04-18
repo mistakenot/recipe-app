@@ -3,6 +3,7 @@ import { FlatList, View, Modal } from 'react-native';
 import { ListItem, Button, Text, ThemeProvider, Input } from 'react-native-elements';
 import { ProductOverlay } from './ProductOverlay';
 import { SearchBar } from './SearchBar';
+import { observer } from 'mobx-react';
 
 import { updateProductAmount } from '../state';
 
@@ -23,6 +24,7 @@ const productListStyle = {
     padding: 10
 }
 
+@observer
 export class ProductList extends React.Component {
     constructor(props) {
         super(props)
