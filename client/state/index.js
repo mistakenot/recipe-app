@@ -1,20 +1,33 @@
-import { observable, action } from 'mobx';
+import { observable, action, autorun } from 'mobx';
 import { testProductData } from "./data.js";
 
-export const productStore = observable(testProductData);
+let defaultState = {
+    products: testProductData,
+    value: 1
+}
 
-export const updateProductAmount = action((key, amount) => {
-    let product = productStore.filter(p => p.key === key)[0]
+export const store = observable(defaultState);
 
+export const productStore = store.products;
+
+export const updateProductAmount = action(function(key, amount) {
+    let product = store.products[0].amount = 1231;
+    
     if (product) {
-        product.amount = amount;
+        console.warn({key, amount});
+        // store.products[0].amount = amount;
+        store.value = 3;
     }
 })
 
-export const addNewProduct = action((name, iban) => {
+export const addNewProduct = action(function(name, iban) {
     productStore.push({
         name, iban, amount: 0, key: name 
     })
 })
 
 export const recipeStore = observable([])
+
+autorun(() => {
+    console.log("UPDATE");
+})

@@ -12,6 +12,7 @@ export class ProductOverlay extends React.Component {
 
     onConfirm() {
         this.props.onConfirm({
+            key: this.props.product.key,
             amount: this.state.newAmount
         });
     }

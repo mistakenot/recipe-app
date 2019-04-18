@@ -1,34 +1,32 @@
 import React from 'react';
 import {
-  Image,
   Platform,
   ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View
 } from 'react-native';
 import { WebBrowser } from 'expo';
 
 import { MonoText } from '../components/StyledText';
 import { ProductList } from '../components/ProductList';
-import {observer} from 'mobx-react';
+import { observer } from 'mobx-react';
 
-import { productState } from '../state';
+import { productStore } from '../state';
 
-@observer
-export default class HomeScreen extends React.Component {
+export default observer(class HomeScreen extends React.Component {
   static navigationOptions = {
     header: null,
   };
 
   render() {
+    console.warn("RENDER: " + productStore);
     return (
       <View style={styles.container}>
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
 
           <View>
-            <ProductList products={[]}/>
+            <ProductList products={productStore}/>
           </View>
 
         </ScrollView>
@@ -77,7 +75,7 @@ export default class HomeScreen extends React.Component {
       'https://docs.expo.io/versions/latest/guides/up-and-running.html#can-t-see-your-changes'
     );
   };
-}
+});
 
 const styles = StyleSheet.create({
   container: {

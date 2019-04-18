@@ -4,6 +4,8 @@ import { ListItem, Button, Text, ThemeProvider, Input } from 'react-native-eleme
 import { ProductOverlay } from './ProductOverlay';
 import { SearchBar } from './SearchBar';
 
+import { updateProductAmount } from '../state';
+
 const Product = ({name, index, amount, onPress}) => (
     <ListItem
         key={index}
@@ -50,7 +52,8 @@ export class ProductList extends React.Component {
         return this.state.products[this.state.activeProductIndex] || {amount: 0.00};
     }
 
-    onUpdateProduct(amount) {
+    onUpdateProduct(key, amount) {
+        updateProductAmount(key, amount);
         this.setState({showModal: false});
     }
 
@@ -69,7 +72,7 @@ export class ProductList extends React.Component {
                     isVisible={this.state.showModal} 
                     product={this.activeProduct()}
                     onCancel={() => this.setState({showModal: false})}
-                    onConfirm={(item) => this.onUpdateProduct(item)}></ProductOverlay>
+                    onConfirm={(item) => this.onUpdateProduct(item.key, item.amount)}></ProductOverlay>
                 <SearchBar searchTerm={this.state.searchTerm} onChangeText={(term) => {this.onFilter(term)}}/>
                 <FlatList
                     data={this.state.products}
